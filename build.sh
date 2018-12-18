@@ -40,12 +40,14 @@ if [ $VANILLA -eq 1 ]; then
     pushd rust-vanilla
 
     # Even if we already cloned, reset the working tree and reapply patches
-    git checkout -f 1.31.0
-    git submodule update -f
+    # git checkout -f 1.31.0
+    # git submodule update -f
     echo "++++++++++++++++++++++++ PATCHING"
     for a in $SCRIPT_DIR/vanilla-patches/*; do
+        patch --quiet -N --dry-run -p1 < "$a"
+        [[ $? -eq 1 ]] && echo "====================== Skipping patch (already applied or failing): $a" && continue
         echo "Applying patch: $a"
-        patch -p1 < $a
+        patch -p1 < "$a"
     done
     echo "++++++++++++++++++++++++ END PATCHING"
 

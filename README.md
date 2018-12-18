@@ -9,6 +9,7 @@ Only "stable" channel was tested.
 * currently rust depends on libunwind.a being present for building, one of the patches addresses this
 * the ebuild provided has lot of hard-coded variables, but it works; eclasses will need updates before it can be ported back to a "sane" ebuild
     * the ebuild needs FILESDIR (files/), symlink it to the usual gentoo repo (the only used patch is the clippy-sysroot)
+    * when compiling **within** the chroot, drop the vanilla-patches in /etc/portage/patches/dev-lang/rust, otherwise the resulting compiler won't be able to produce dylib binaries
 
 ## Running the script
 1. `sudo` access may be required for the make install part of the cross-toolchain (default install prefix is /usr/local, so make sure that is in the PATH also)

@@ -7,7 +7,8 @@ Only "stable" channel was tested.
 
 * currently, the non-vanilla (smaeul) tree is not working/not tested (this is a bit stale and should not be used anyway)
 * currently rust depends on libunwind.a being present for building, one of the patches addresses this
-* the ebuild provided has lot of hard-coded variables, but it works; eclasses will need updates before
+* the ebuild provided has lot of hard-coded variables, but it works; eclasses will need updates before it can be ported back to a "sane" ebuild
+    * the ebuild needs FILESDIR (files/), symlink it to the usual gentoo repo (the only used patch is the clippy-sysroot)
 
 ## Running the script
 1. `sudo` access may be required for the make install part of the cross-toolchain (default install prefix is /usr/local, so make sure that is in the PATH also)

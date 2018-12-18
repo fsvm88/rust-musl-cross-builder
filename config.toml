@@ -1,0 +1,42 @@
+[llvm]
+static-libstdcpp = true
+ninja = true
+targets = "X86"
+
+
+[build]
+build = "x86_64-unknown-linux-gnu"    # defaults to your host platform
+
+# In addition to the build triple, other triples to produce full compiler
+# toolchains for. Each of these triples will be bootstrapped from the build
+# triple and then will continue to bootstrap themselves. This platform must
+# currently be able to run all of the triples provided here.
+host = ["x86_64-unknown-linux-musl"]   # defaults to just the build triple
+
+# In addition to all host triples, other triples to produce the standard library
+# for. Each host triple will be used to produce a copy of the standard library
+# for each target triple.
+target = ["x86_64-unknown-linux-musl"] # defaults to just the build triple
+
+docs = false
+fast-submodules = false
+extended = true
+#tools = ["cargo", "rls", "rustfmt", "analysis", "src"]
+#verbose = 0
+openssl-static = true
+low-priority = false
+
+
+[rust]
+codegen-units = 0
+use-jemalloc = false
+channel = "stable"
+
+
+[target.x86_64-unknown-linux-musl]
+crt-static = false
+cc = "x86_64-unknown-linux-musl-gcc"
+cxx = "x86_64-unknown-linux-musl-g++"
+ar ="x86_64-unknown-linux-musl-ar"
+ranlib = "x86_64-unknown-linux-musl-ranlib"
+linker = "x86_64-unknown-linux-musl-gcc"

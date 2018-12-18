@@ -4,6 +4,10 @@ SCRIPT_DIR=$(dirname $0)
 TMP_DIR="$HOME/tmp-rust-musl-cross-builder"
 VANILLA=1
 
+mkdir -p $TMP_DIR
+[ ! -d $TMP_DIR ] \
+    && echo "TMP_DIR ($TMP_DIR) does not exist or is not a directory, bailing out!" \
+    && exit 23
 cd $TMP_DIR
 echo "---------------- CROSS-ENV STAGE" 
 [ ! -d "musl-cross-make" ] && git clone https://github.com/richfelker/musl-cross-make.git

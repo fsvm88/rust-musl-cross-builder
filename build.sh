@@ -1,6 +1,6 @@
 #!/bin/bash
 
-SCRIPT_DIR=$(dirname $0)
+SCRIPT_DIR=$(pwd)
 TMP_DIR="$HOME/tmp-rust-musl-cross-builder"
 VANILLA=1
 

@@ -19,7 +19,7 @@ git checkout -f
 
 cp $SCRIPT_DIR/config.mak .
 
-make -j
+make $MAKEOPTS
 
 sudo make install
 
@@ -31,20 +31,23 @@ if [ $VANILLA -eq 1 ]; then
     [ ! -d "rust-vanilla" ] \
         && git clone https://github.com/rust-lang/rust.git rust-vanilla \
         && cd rust-vanilla \
-        && git submodule init \
-        && git submodule update -f \
         && git checkout 1.31.0 \
         && git clean -dfx \
-        && git checkout -f 1.31.0 \
+        && git submodule init . \
+        && git submodule update -f \
+        && git clean -dfx \
         && cd ..
     pushd rust-vanilla
 
     # Even if we already cloned, reset the working tree and reapply patches
     git checkout -f 1.31.0
     git submodule update -f
+    echo "++++++++++++++++++++++++ PATCHING"
     for a in $SCRIPT_DIR/vanilla-patches/*; do
+        echo "Applying patch: $a"
         patch -p1 < $a
     done
+    echo "++++++++++++++++++++++++ END PATCHING"
 
     cp $SCRIPT_DIR/config-vanilla.toml ./config.toml
 

@@ -10,19 +10,21 @@ mkdir -p $TMP_DIR
     && exit 23
 echo "---------------- Running in TMP_DIR: $TMP_DIR"
 cd $TMP_DIR
-echo "---------------- CROSS-ENV STAGE" 
+echo "---------------- CROSS-ENV STAGE"
 [ ! -d "musl-cross-make" ] && git clone https://github.com/richfelker/musl-cross-make.git
 pushd musl-cross-make
+if [[ ! -f .installed && ! -f /usr/local/bin/x86_64-unknown-linux-musl-gcc ]]; then
+    git pull
+    git checkout -f
 
-git pull
-git checkout -f
+    cp $SCRIPT_DIR/config.mak .
 
-cp $SCRIPT_DIR/config.mak .
+    make $MAKEOPTS
 
-make $MAKEOPTS
+    sudo make install
 
-sudo make install
-
+    touch .installed
+fi
 popd
 echo "---------------- END CROSS-ENV STAGE" 
 
@@ -31,11 +33,9 @@ if [ $VANILLA -eq 1 ]; then
     [ ! -d "rust-vanilla" ] \
         && git clone https://github.com/rust-lang/rust.git rust-vanilla \
         && cd rust-vanilla \
-        && git checkout 1.31.0 \
+        && git checkout -f 1.31.0 \
         && git clean -dfx \
-        && git submodule init . \
-        && git submodule update -f \
-        && git clean -dfx \
+        && git submodule update -f --init --recursive \
         && cd ..
     pushd rust-vanilla
 
@@ -65,8 +65,7 @@ else
         && git submodule update -f \
         && git checkout bootstrap-1.30.1 \
         && git clean -dfx \
-        && git checkout -f bootstrap-1.30.1 \
-        && git submodule update -f \
+        && git submodule update -f --init --recursive \
         && cd ..
     pushd rust
 

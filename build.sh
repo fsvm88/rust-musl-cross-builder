@@ -5,6 +5,8 @@ TMP_DIR="$HOME/tmp-rust-musl-cross-builder"
 VANILLA=1
 INVALIDATED=0
 
+[ -z "$MAKEOPTS" ] && MAKEOPTS="-j1"
+
 mkdir -p $TMP_DIR
 [ ! -d $TMP_DIR ] \
     && echo "TMP_DIR ($TMP_DIR) does not exist or is not a directory, bailing out!" \
@@ -33,12 +35,13 @@ popd
 echo "---------------- END CROSS-ENV STAGE" 
 
 echo "---------------- RUST STAGE"
+[[ "$MAKEOPTS" =~ "--silent" ]] && MAKEOPTS="${MAKEOPTS/--silent/}"
 if [ $VANILLA -eq 1 ]; then
     echo "====================== Running with rust-vanilla"
     [ ! -d "rust-vanilla" ] \
         && git clone https://github.com/rust-lang/rust.git rust-vanilla \
         && cd rust-vanilla \
-        && git checkout -f 1.31.0 \
+        && git checkout -f 1.31.1 \
         && git clean -dfx \
         && git submodule update -f --init --recursive \
         && cd .. \
@@ -50,6 +53,7 @@ if [ $VANILLA -eq 1 ]; then
         rm -f .built .dist
     fi
     if [ ! -f .built ]; then
+        ./x.py clean
         echo "====================== rust-vanilla was never built, rerunning"
         echo "++++++++++++++++++++++++ PATCHING"
         for a in $SCRIPT_DIR/vanilla-patches/*; do
@@ -62,7 +66,7 @@ if [ $VANILLA -eq 1 ]; then
 
         cp $SCRIPT_DIR/config-vanilla.toml ./config.toml
 
-        ./x.py build \
+        ./x.py build $MAKEOPTS \
             --exclude src/tools/miri
         touch .built
         INVALIDATED=1

@@ -1,7 +1,8 @@
-diff -Nuar rustc-1.31.0-src.orig/src/liblibc/src/unix/mod.rs rustc-1.31.0-src/src/liblibc/src/unix/mod.rs
---- rustc-1.31.0-src.orig/src/liblibc/src/unix/mod.rs	2018-12-05 00:42:58.000000000 +0100
-+++ rustc-1.31.0-src/src/liblibc/src/unix/mod.rs	2018-12-15 20:44:21.036100053 +0100
-@@ -287,11 +287,7 @@
+diff --git a/src/liblibc/src/unix/mod.rs b/src/liblibc/src/unix/mod.rs
+index 9c68178a..1ae270e9 100644
+--- a/src/liblibc/src/unix/mod.rs
++++ b/src/liblibc/src/unix/mod.rs
+@@ -287,11 +287,7 @@ cfg_if! {
          // cargo build, don't pull in anything extra as the libstd dep
          // already pulls in all libs.
      } else if #[cfg(target_env = "musl")] {

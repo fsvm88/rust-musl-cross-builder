@@ -87,6 +87,7 @@ pkg_pretend() {
 }
 
 pkg_setup() {
+	export RUST_BACKTRACE=1
 	pre_build_checks
 	python-any-r1_pkg_setup
 	if use system-llvm; then
@@ -99,7 +100,7 @@ src_prepare() {
 
 	local rust_stage0="rust-${RUST_STAGE0_VERSION}-$rust_cust_abi"
 
-	"${WORKDIR}/${rust_stage0}"/install.sh --disable-ldconfig --destdir="${rust_stage0_root}" --prefix=/ || die
+	"${WORKDIR}/${rust_stage0}"/install.sh --disable-ldconfig --destdir="${rust_stage0_root}" --prefix=/ --components=rust-std-x86_64-unknown-linux-musl,rustc,cargo || die
 
 	default
 }
@@ -153,7 +154,7 @@ src_configure() {
 		tools = [${tools}]
 		[install]
 		prefix = "${EPREFIX}/usr"
-		libdir = "$(get_libdir)/${P}"
+		libdir = "$(get_libdir)"
 		docdir = "share/doc/${P}"
 		mandir = "share/${P}/man"
 		[rust]

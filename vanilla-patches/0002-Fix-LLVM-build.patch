@@ -1,14 +1,14 @@
 From 67a4fbe55220b79ea80f3e0588fe77c729a70d3d Mon Sep 17 00:00:00 2001
 From: Samuel Holland <samuel@sholland.org>
 Date: Fri, 8 Sep 2017 00:04:29 -0500
-Subject: [PATCH] Fix LLVM build
+Subject: [PATCH 02/25] Fix LLVM build
 
 ---
  src/bootstrap/lib.rs | 3 ++-
  1 file changed, 2 insertions(+), 1 deletion(-)
 
 diff --git a/src/bootstrap/lib.rs b/src/bootstrap/lib.rs
-index 6b88516bacd8..055a87efaaaf 100644
+index 6b88516bac..055a87efaa 100644
 --- a/src/bootstrap/lib.rs
 +++ b/src/bootstrap/lib.rs
 @@ -772,7 +772,8 @@ impl Build {
@@ -21,3 +21,6 @@ index 6b88516bacd8..055a87efaaaf 100644
                             .collect::<Vec<_>>();
  
          // If we're compiling on macOS then we add a few unconditional flags
+-- 
+2.19.1
+

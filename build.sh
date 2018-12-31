@@ -62,7 +62,8 @@ if [ $VANILLA -eq 1 ]; then
             echo "Applying patch: $a"
             patch -p1 < "$a"
         done
-        echo "++++++++++++++++++++++++ END PATCHING"
+        echo "++++++++++++++++++++++++ END PATCHING (sleeping 10 seconds to allow checking of output)"
+        sleep 10
 
         cp $SCRIPT_DIR/config-vanilla.toml ./config.toml
 

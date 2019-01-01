@@ -1,7 +1,7 @@
 From c822b31f554ed2f930be8625973a401fd438c123 Mon Sep 17 00:00:00 2001
 From: Samuel Holland <samuel@sholland.org>
 Date: Fri, 8 Sep 2017 22:11:14 -0500
-Subject: [PATCH 05/22] Remove -nostdlib and musl_root from musl targets
+Subject: [PATCH] Remove -nostdlib and musl_root from musl targets
 
 ---
  config.toml.example                           |  6 ---
@@ -19,7 +19,7 @@ Subject: [PATCH 05/22] Remove -nostdlib and musl_root from musl targets
  12 files changed, 4 insertions(+), 188 deletions(-)
 
 diff --git a/config.toml.example b/config.toml.example
-index e8cb0cba6b..1971fea758 100644
+index e8cb0cba6b1f..1971fea758e8 100644
 --- a/config.toml.example
 +++ b/config.toml.example
 @@ -452,12 +452,6 @@
@@ -36,7 +36,7 @@ index e8cb0cba6b..1971fea758 100644
  # probably don't want to use this.
  #qemu-rootfs = "..."
 diff --git a/src/bootstrap/bin/rustc.rs b/src/bootstrap/bin/rustc.rs
-index b6764c1aae..6fa60bd9a5 100644
+index b6764c1aaeab..6fa60bd9a5b0 100644
 --- a/src/bootstrap/bin/rustc.rs
 +++ b/src/bootstrap/bin/rustc.rs
 @@ -30,7 +30,6 @@
@@ -64,7 +64,7 @@ index b6764c1aae..6fa60bd9a5 100644
          if let Ok(target_linker) = env::var("RUSTC_TARGET_LINKER") {
              cmd.arg(format!("-Clinker={}", target_linker));
 diff --git a/src/bootstrap/cc_detect.rs b/src/bootstrap/cc_detect.rs
-index d5da0cabec..47cc31bded 100644
+index d5da0cabec84..47cc31bded21 100644
 --- a/src/bootstrap/cc_detect.rs
 +++ b/src/bootstrap/cc_detect.rs
 @@ -95,7 +95,7 @@ pub fn find(build: &mut Build) {
@@ -123,7 +123,7 @@ index d5da0cabec..47cc31bded 100644
      }
  }
 diff --git a/src/bootstrap/compile.rs b/src/bootstrap/compile.rs
-index 69d45acded..7bb38ac7ec 100644
+index 69d45acdedaf..7bb38ac7ec38 100644
 --- a/src/bootstrap/compile.rs
 +++ b/src/bootstrap/compile.rs
 @@ -86,13 +86,6 @@ impl Step for Std {
@@ -186,7 +186,7 @@ index 69d45acded..7bb38ac7ec 100644
  }
  
 diff --git a/src/bootstrap/config.rs b/src/bootstrap/config.rs
-index a9d330e06a..745785a8ae 100644
+index a9d330e06a15..745785a8ae21 100644
 --- a/src/bootstrap/config.rs
 +++ b/src/bootstrap/config.rs
 @@ -136,8 +136,6 @@ pub struct Config {
@@ -239,10 +239,10 @@ index a9d330e06a..745785a8ae 100644
  
                  config.target_config.insert(INTERNER.intern_string(triple.clone()), target);
 diff --git a/src/bootstrap/configure.py b/src/bootstrap/configure.py
-index 0cf84a6298..4845e93a0e 100755
+index 0cf84a62986a..4845e93a0e3b 100755
 --- a/src/bootstrap/configure.py
 +++ b/src/bootstrap/configure.py
-@@ -112,28 +112,6 @@ v("aarch64-linux-android-ndk", "target.aarch64-linux-android.android-ndk",
+@@ -112,28 +112,6 @@ def v(*args):
    "aarch64-linux-android NDK standalone path")
  v("x86_64-linux-android-ndk", "target.x86_64-linux-android.android-ndk",
    "x86_64-linux-android NDK standalone path")
@@ -272,7 +272,7 @@ index 0cf84a6298..4845e93a0e 100755
    "rootfs in qemu testing, you probably don't want to use this")
  v("qemu-aarch64-rootfs", "target.aarch64-unknown-linux-gnu.qemu-rootfs",
 diff --git a/src/bootstrap/lib.rs b/src/bootstrap/lib.rs
-index 30e84bc13f..cf6f410ccb 100644
+index 30e84bc13f40..cf6f410ccb57 100644
 --- a/src/bootstrap/lib.rs
 +++ b/src/bootstrap/lib.rs
 @@ -861,14 +861,6 @@ impl Build {
@@ -291,7 +291,7 @@ index 30e84bc13f..cf6f410ccb 100644
      fn no_std(&self, target: Interned<String>) -> Option<bool> {
          self.config.target_config.get(&target)
 diff --git a/src/bootstrap/sanity.rs b/src/bootstrap/sanity.rs
-index 724cb5841f..5af34e441c 100644
+index 724cb5841f48..5af34e441c84 100644
 --- a/src/bootstrap/sanity.rs
 +++ b/src/bootstrap/sanity.rs
 @@ -21,7 +21,7 @@
@@ -339,7 +339,7 @@ index 724cb5841f..5af34e441c 100644
              // There are three builds of cmake on windows: MSVC, MinGW, and
              // Cygwin. The Cygwin build does not have generators for Visual
 diff --git a/src/ci/docker/dist-i586-gnu-i586-i686-musl/Dockerfile b/src/ci/docker/dist-i586-gnu-i586-i686-musl/Dockerfile
-index ba2d32a929..412c37fdd1 100644
+index ba2d32a9296b..412c37fdd128 100644
 --- a/src/ci/docker/dist-i586-gnu-i586-i686-musl/Dockerfile
 +++ b/src/ci/docker/dist-i586-gnu-i586-i686-musl/Dockerfile
 @@ -30,8 +30,6 @@ COPY scripts/sccache.sh /scripts/
@@ -352,7 +352,7 @@ index ba2d32a929..412c37fdd1 100644
        --disable-docs
  
 diff --git a/src/ci/docker/dist-various-1/Dockerfile b/src/ci/docker/dist-various-1/Dockerfile
-index e2484b7224..1855b7f3e5 100644
+index e2484b7224b2..1855b7f3e5ab 100644
 --- a/src/ci/docker/dist-various-1/Dockerfile
 +++ b/src/ci/docker/dist-various-1/Dockerfile
 @@ -116,13 +116,6 @@ ENV CC_mipsel_unknown_linux_musl=mipsel-openwrt-linux-gcc \
@@ -370,7 +370,7 @@ index e2484b7224..1855b7f3e5 100644
        --disable-docs
  
 diff --git a/src/ci/docker/dist-x86_64-musl/Dockerfile b/src/ci/docker/dist-x86_64-musl/Dockerfile
-index 06f8a2fbba..f5dd379528 100644
+index 06f8a2fbba83..f5dd37952833 100644
 --- a/src/ci/docker/dist-x86_64-musl/Dockerfile
 +++ b/src/ci/docker/dist-x86_64-musl/Dockerfile
 @@ -30,7 +30,6 @@ COPY scripts/sccache.sh /scripts/
@@ -382,7 +382,7 @@ index 06f8a2fbba..f5dd379528 100644
        --disable-docs
  
 diff --git a/src/librustc_target/spec/linux_musl_base.rs b/src/librustc_target/spec/linux_musl_base.rs
-index 7a3f3c2a51..32fe2f880a 100644
+index 7a3f3c2a518b..32fe2f880ac3 100644
 --- a/src/librustc_target/spec/linux_musl_base.rs
 +++ b/src/librustc_target/spec/linux_musl_base.rs
 @@ -13,53 +13,12 @@ use spec::{LinkerFlavor, TargetOptions};
@@ -439,6 +439,3 @@ index 7a3f3c2a51..32fe2f880a 100644
      // These targets statically link libc by default
      base.crt_static_default = true;
      // These targets allow the user to choose between static and dynamic linking.
--- 
-2.19.2
-

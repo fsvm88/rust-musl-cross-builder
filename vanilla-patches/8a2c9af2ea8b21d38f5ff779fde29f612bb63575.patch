@@ -1,7 +1,7 @@
 From 8a2c9af2ea8b21d38f5ff779fde29f612bb63575 Mon Sep 17 00:00:00 2001
 From: Samuel Holland <samuel@sholland.org>
 Date: Sun, 16 Sep 2018 16:34:15 +0000
-Subject: [PATCH 08/22] Fix powerpc64 ELFv2 big-endian struct-passing ABI
+Subject: [PATCH] Fix powerpc64 ELFv2 big-endian struct-passing ABI
 
 The requirements here are not "ELFv1" requirements, but big-endian
 requirements, as the extension or non-extension of the argument is
@@ -15,7 +15,7 @@ it to use the same code path everywhere.
  2 files changed, 13 insertions(+), 18 deletions(-)
 
 diff --git a/src/librustc_target/abi/call/powerpc64.rs b/src/librustc_target/abi/call/powerpc64.rs
-index 0c5ec77a39..934d2b1138 100644
+index 0c5ec77a3982..934d2b1138af 100644
 --- a/src/librustc_target/abi/call/powerpc64.rs
 +++ b/src/librustc_target/abi/call/powerpc64.rs
 @@ -75,7 +75,9 @@ fn classify_ret_ty<'a, Ty, C>(cx: C, ret: &mut ArgType<'a, Ty>, abi: ABI)
@@ -62,7 +62,7 @@ index 0c5ec77a39..934d2b1138 100644
  
      arg.cast_to(Uniform {
 diff --git a/src/librustc_target/abi/mod.rs b/src/librustc_target/abi/mod.rs
-index 1a5d2801af..0ec2cc0d7b 100644
+index 1a5d2801af0c..0ec2cc0d7bf4 100644
 --- a/src/librustc_target/abi/mod.rs
 +++ b/src/librustc_target/abi/mod.rs
 @@ -214,7 +214,7 @@ impl<'a> HasDataLayout for &'a TargetDataLayout {
@@ -74,6 +74,3 @@ index 1a5d2801af..0ec2cc0d7b 100644
  pub enum Endian {
      Little,
      Big
--- 
-2.19.2
-

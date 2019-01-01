@@ -4,6 +4,13 @@ SCRIPT_DIR=$(pwd)
 TMP_DIR="$HOME/tmp-rust-musl-cross-builder"
 VANILLA=1
 INVALIDATED=0
+export RUST_BACKTRACE=1
+
+function test_output() {
+    [ "$1" -ne 0 ] \
+        && echo "ERROR: $2" \
+        && exit $3
+}
 
 [ -z "$MAKEOPTS" ] && MAKEOPTS="-j1"
 
@@ -23,8 +30,10 @@ if [[ ! -f .installed || ! -f /usr/local/bin/x86_64-unknown-linux-musl-gcc ]]; t
     cp $SCRIPT_DIR/config.mak .
 
     make $MAKEOPTS
+    test_output "$?" "failed building musl-cross-make" "5"
 
     sudo make install
+    test_output "$?" "failed installing musl-cross-make" "6"
 
     touch .installed
     INVALIDATED=1
@@ -59,8 +68,9 @@ if [ $VANILLA -eq 1 ]; then
         for a in $SCRIPT_DIR/vanilla-patches/*; do
             patch --quiet -N --dry-run -p1 < "$a"
             [[ $? -eq 1 ]] && echo "====================== Skipping patch (already applied or failing): $a" && continue
-            echo "Applying patch: $a"
+            echo "====================== Applying patch: $a"
             patch -p1 < "$a"
+            test_output "$?" "tried to apply non-applied patch after dry-run, but got error!" "7"
         done
         echo "++++++++++++++++++++++++ END PATCHING (sleeping 10 seconds to allow checking of output)"
         sleep 10
@@ -69,6 +79,7 @@ if [ $VANILLA -eq 1 ]; then
 
         ./x.py build $MAKEOPTS \
             --exclude src/tools/miri
+        test_output "$?" "failed building rust, aborting!" "8"
         touch .built
         INVALIDATED=1
     else
@@ -81,6 +92,7 @@ if [ $VANILLA -eq 1 ]; then
     fi
     if [ ! -f .dist ]; then
         ./x.py dist
+        test_output "$?" "failed dist'ing rust, aborting!" "9"
         touch .dist
     else
         echo "====================== rust-vanilla was already packaged, if you want to repackage with different config remove: $TMP_DIR/rust-vanilla/.dist"

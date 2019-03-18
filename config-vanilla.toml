@@ -37,3 +37,11 @@ ar = "/usr/local/bin/x86_64-unknown-linux-musl-ar"
 ranlib = "/usr/local/bin/x86_64-unknown-linux-musl-ranlib"
 linker = "/usr/local/bin/x86_64-unknown-linux-musl-gcc"
 crt-static = false
+
+[target.x86_64-gentoo-linux-musl]
+cc = "/usr/local/bin/x86_64-unknown-linux-musl-gcc"
+cxx = "/usr/local/bin/x86_64-unknown-linux-musl-g++"
+ar = "/usr/local/bin/x86_64-unknown-linux-musl-ar"
+ranlib = "/usr/local/bin/x86_64-unknown-linux-musl-ranlib"
+linker = "/usr/local/bin/x86_64-unknown-linux-musl-gcc"
+crt-static = true

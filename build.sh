@@ -50,7 +50,7 @@ if [ $VANILLA -eq 1 ]; then
     [ ! -d "rust-vanilla" ] \
         && git clone https://github.com/rust-lang/rust.git rust-vanilla \
         && cd rust-vanilla \
-        && git checkout -f 1.31.1 \
+        && git checkout -f 1.32.0 \
         && git clean -dfx \
         && git submodule update -f --init --recursive \
         && cd .. \

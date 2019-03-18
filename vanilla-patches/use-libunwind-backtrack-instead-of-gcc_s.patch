@@ -1,0 +1,14 @@
+diff -Nuar rust.orig/src/libstd/sys/unix/backtrace/tracing/mod.rs rust/src/libstd/sys/unix/backtrace/tracing/mod.rs
+--- rust.orig/src/libstd/sys/unix/backtrace/tracing/mod.rs	2019-03-18 18:10:43.340899742 +0100
++++ rust/src/libstd/sys/unix/backtrace/tracing/mod.rs	2019-03-18 20:39:41.114405366 +0100
+@@ -1,8 +1,8 @@
+ pub use self::imp::*;
+ 
+-#[cfg(not(all(target_os = "ios", target_arch = "arm")))]
++#[cfg(not(all((target_os = "ios", target_arch = "arm"), target_os = "linux")))]
+ #[path = "gcc_s.rs"]
+ mod imp;
+-#[cfg(all(target_os = "ios", target_arch = "arm"))]
++#[cfg(all((target_os = "ios", target_arch = "arm"), target_os = "linux"))]
+ #[path = "backtrace_fn.rs"]
+ mod imp;
